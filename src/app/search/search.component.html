@@ -1,0 +1,99 @@
+<br />
+<div nz-row>
+    <div nz-col [nzSpan]="12" [nzPush]="10" [nzOffset]="1">
+        <div class="example-input">
+            <nz-select style="width: 100%;" nzSize="large" nzShowSearch nzServerSearch
+                nzPlaceHolder="Please enter your search key." [nzShowArrow]="true" [nzFilterOption]="nzFilterOption"
+                [(ngModel)]="selectedValue" (ngModelChange)="submitForm()" (nzOnSearch)="onInput($event)">
+                <nz-option *ngFor="let option of options" [nzLabel]="option.login" [nzValue]="option">
+                </nz-option>
+            </nz-select>
+        </div>
+    </div>
+    <div nz-col [nzSpan]="10" [nzPull]="12">
+        <div *ngIf="count" style="font-size: 20px;">{{count | number}} users found with your key.</div>
+    </div>
+</div>
+<br />
+<div nz-row>
+
+    <div nz-col [nzSpan]="16" [nzPush]="6" [nzOffset]="1" *ngIf="repos">
+        <div nz-row>
+            <nz-col [nzSpan]="11" style="margin:4px;" *ngFor="let repo of repos;">
+                <nz-card style="height: 250px;" [nzActions]="[actionGitUrl, actionLang]">
+                    <nz-card-meta style="height: 138px;" [nzAvatar]="avatarTemplate1"
+                        nzTitle="{{repo?.name || 'Repository Full Name not Available.'}}"
+                        nzDescription="{{repo?.description || 'Description is not available for this repository.'}}">
+                    </nz-card-meta>
+                    <i nz-icon nzType="clock-circle" nzTheme="outline"></i> {{repo?.updated_at | date}}
+                </nz-card>
+                <ng-template #avatarTemplate1>
+                    <nz-avatar [nzText]="repo?.language || 'Git'" nzSize="large"
+                        [ngStyle]="{ 'background-color': '#00a2ae' }" style="vertical-align: middle;"></nz-avatar>
+                </ng-template>
+                <ng-template #actionGitUrl>
+                    <a href="{{repo?.svn_url}}" target="_blank"><i nz-icon nzType="file-text" nzTheme="outline"></i>
+                        Git Url</a>
+                </ng-template>
+                <ng-template #actionLang>
+                    <i nz-icon nzType="code" nzTheme="outline"></i>
+                    {{repo?.language || 'Undefined.'}}<br />
+                </ng-template>
+            </nz-col>
+        </div>
+    </div>
+    <div nz-col [nzSpan]="6" [nzPull]="16" *ngIf="userData; else emptyDiv">
+        <nz-card style="width:300px;" [nzCover]="coverTemplate"
+            [nzActions]="[actionGit, actionFollowers, actionFollowings]">
+            <nz-card-meta nzTitle="{{userData?.name}}" nzDescription="{{userData?.bio}}" [nzAvatar]="avatarTemplate">
+            </nz-card-meta><br />
+            <a href="{{userData?.blog || selectedValue?.html_url}}" target="_blank"><i nz-icon nzType="link"
+                    nzTheme="outline"></i>
+                Portfolio</a><br />
+            <i nz-icon nzType="environment" nzTheme="outline"></i> {{userData?.location || 'Undefined Location.'}}<br />
+            <i nz-icon nzType="bank" nzTheme="outline"></i> {{userData?.company || 'Github'}}<br /><br />
+            <div>
+                <div *ngFor="let data of languages | keyvalue">
+		<span *ngIf="data.value > 0 && data.value <= 10"> <!-- danger -->
+	            {{data.key}} <nz-progress [nzPercent]="data.value" nzStrokeColor="#dc3545" nzStatus="active"></nz-progress>
+		</span>
+		<span *ngIf="data.value > 10 && data.value <= 35"> <!-- warning -->
+	            {{data.key}} <nz-progress [nzPercent]="data.value" nzStrokeColor="#ffc107" nzStatus="active"></nz-progress>
+		</span>
+		<span *ngIf="data.value > 35 && data.value <= 70"> <!-- primary -->
+	            {{data.key}} <nz-progress [nzPercent]="data.value" nzStrokeColor="#007bff" nzStatus="active"></nz-progress>
+		</span>
+		<span *ngIf="data.value > 70 && data.value <= 100"> <!-- success -->
+	            {{data.key}} <nz-progress [nzPercent]="data.value" nzStrokeColor="#28a745" nzStatus="active"></nz-progress>
+		</span>
+		<span *ngIf="data.key == 'Miscellaneous'"> <!-- secondary -->
+	            {{data.key}} <nz-progress [nzPercent]="data.value" nzStrokeColor="#6c757d" nzStatus="active"></nz-progress>
+		</span>
+                </div><br/><small><b>* Language Proficiency based on repos.</b></small>
+            </div>
+        </nz-card>
+        <ng-template #avatarTemplate>
+            <nz-avatar style="cursor: pointer;" (click)="createNotification('warning', selectedValue?.html_url)"
+                nzSrc="https://image.flaticon.com/icons/png/512/25/25231.png"></nz-avatar>
+        </ng-template>
+        <ng-template #coverTemplate>
+            <img alt="example" src="{{userData?.avatar_url}}" />
+        </ng-template>
+        <ng-template #actionGit>
+            <i nz-icon nzType="project" nzTheme="outline" title="Repositories"></i> {{repos?.length || '0'}}
+        </ng-template>
+        <ng-template #actionFollowers>
+            <i nz-icon nzType="usergroup-add" nzTheme="outline" title="Followers"></i> {{userData?.followers || '0'}}
+        </ng-template>
+        <ng-template #actionFollowings>
+            <i nz-icon nzType="team" nzTheme="outline" title="Following"></i> {{userData?.following || '0'}}
+        </ng-template>
+    </div>
+
+    <!-- Else Section 1 -->
+
+    <ng-template #emptyDiv>
+        <nz-result nzStatus="404" nzTitle="No Data" nzSubTitle="Search something to populate this page.">
+        </nz-result>
+    </ng-template>
+</div>
