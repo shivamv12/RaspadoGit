@@ -3,8 +3,9 @@
     <div nz-col [nzSpan]="12" [nzPush]="10" [nzOffset]="1">
         <div class="example-input">
             <nz-select style="width: 100%;" nzSize="large" nzShowSearch nzServerSearch
-                nzPlaceHolder="Please enter your search key." [nzShowArrow]="true" [nzFilterOption]="nzFilterOption"
-                [(ngModel)]="selectedValue" (ngModelChange)="submitForm()" (nzOnSearch)="onInput($event)">
+                nzPlaceHolder="Please enter username to be searched." [nzShowArrow]="true" [(ngModel)]="selectedValue"
+                (ngModelChange)="submitForm()" (nzOnSearch)="onInput($event)">
+                <!-- [nzFilterOption]="nzFilterOption" -->
                 <nz-option *ngFor="let option of options" [nzLabel]="option.login" [nzValue]="option">
                 </nz-option>
             </nz-select>
@@ -54,22 +55,32 @@
             <i nz-icon nzType="bank" nzTheme="outline"></i> {{userData?.company || 'Github'}}<br /><br />
             <div>
                 <div *ngFor="let data of languages | keyvalue">
-		<span *ngIf="data.value > 0 && data.value <= 10"> <!-- danger -->
-	            {{data.key}} <nz-progress [nzPercent]="data.value" nzStrokeColor="#dc3545" nzStatus="active"></nz-progress>
-		</span>
-		<span *ngIf="data.value > 10 && data.value <= 35"> <!-- warning -->
-	            {{data.key}} <nz-progress [nzPercent]="data.value" nzStrokeColor="#ffc107" nzStatus="active"></nz-progress>
-		</span>
-		<span *ngIf="data.value > 35 && data.value <= 70"> <!-- primary -->
-	            {{data.key}} <nz-progress [nzPercent]="data.value" nzStrokeColor="#007bff" nzStatus="active"></nz-progress>
-		</span>
-		<span *ngIf="data.value > 70 && data.value <= 100"> <!-- success -->
-	            {{data.key}} <nz-progress [nzPercent]="data.value" nzStrokeColor="#28a745" nzStatus="active"></nz-progress>
-		</span>
-		<span *ngIf="data.key == 'Miscellaneous'"> <!-- secondary -->
-	            {{data.key}} <nz-progress [nzPercent]="data.value" nzStrokeColor="#6c757d" nzStatus="active"></nz-progress>
-		</span>
-                </div><br/><small><b>* Language Proficiency based on repos.</b></small>
+                    <span *ngIf="data.value > 0 && data.value <= 10">
+                        <!-- danger -->
+                        {{data.key}} <nz-progress [nzPercent]="data.value" nzStrokeColor="#dc3545" nzStatus="active">
+                        </nz-progress>
+                    </span>
+                    <span *ngIf="data.value > 10 && data.value <= 35">
+                        <!-- warning -->
+                        {{data.key}} <nz-progress [nzPercent]="data.value" nzStrokeColor="#ffc107" nzStatus="active">
+                        </nz-progress>
+                    </span>
+                    <span *ngIf="data.value > 35 && data.value <= 70">
+                        <!-- primary -->
+                        {{data.key}} <nz-progress [nzPercent]="data.value" nzStrokeColor="#007bff" nzStatus="active">
+                        </nz-progress>
+                    </span>
+                    <span *ngIf="data.value > 70 && data.value <= 100">
+                        <!-- success -->
+                        {{data.key}} <nz-progress [nzPercent]="data.value" nzStrokeColor="#28a745" nzStatus="active">
+                        </nz-progress>
+                    </span>
+                    <span *ngIf="data.key == 'Miscellaneous'">
+                        <!-- secondary -->
+                        {{data.key}} <nz-progress [nzPercent]="data.value" nzStrokeColor="#6c757d" nzStatus="active">
+                        </nz-progress>
+                    </span>
+                </div><small>* Language Proficiency based on repos.</small>
             </div>
         </nz-card>
         <ng-template #avatarTemplate>
